@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-	res.send({ hi: 'there' });
+	res.send({ hello: 'there' });
 });
 
 // process env port is the port the host will assign
