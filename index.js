@@ -5,6 +5,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys.js');
 require('./models/User.js');
+require('./models/Survey');
 require('./services/passport.js');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -26,6 +27,7 @@ app.use(passport.session());
 
 require('./routes/authRoutes.js')(app);
 require('./routes/billingRoutes.js')(app);
+require('./routes/surveyRoutes.js')(app);
 
 // handles routing (react router) in production
 if (process.env.NODE_ENV === 'production') {
