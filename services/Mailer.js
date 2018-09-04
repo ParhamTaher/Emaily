@@ -8,6 +8,7 @@ class Mailer extends helper.Mail {
         // constructor in Mail class gets executed as well
         super();
 
+        this.sendGridAPI = sendgrid(keys.sendGridKey);
         this.from_email = new helper.Email('no-reply@emaily.com');
         this.subject = subject;
         this.body = new helper.Content('text/html', content);
@@ -22,8 +23,8 @@ class Mailer extends helper.Mail {
     }
 
     formatEmailAddresses(recipients) {
-        return recipients.map((email) => {
-            return new helper.Email(email);
+        return recipients.map((recipient) => {
+            return new helper.Email(recipient.email);
         });
     }
 
@@ -45,6 +46,17 @@ class Mailer extends helper.Mail {
         this.addPersonalization(personalize);
     }
 
+    async send() {
+        const request = this.sendGridAPI.emptyRequest({
+            method: 'POST',
+            path: '/v3/mail/send',
+            body: this.toJSON()
+        });
+
+        const response = await this.sendGridAPI.API(request);
+
+        return response;
+    }
 }
 
 module.exports = Mailer;
