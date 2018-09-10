@@ -5,17 +5,11 @@ import { Link } from 'react-router-dom';
 
 import SurveyField from './SurveyField';
 import validateEmails from '../../utils/validateEmails';
-
-const FIELDS = [
-    { label: "Survey Title", name: "title" },
-    { label: "Subject Line", name: "subject" },
-    { label: "Email Body", name: "body" },
-    { label: "Recipient List", name: "emails" }
-];
+import formFields from './formFields';
 
 class SurveyForm extends Component {
     renderFields() {
-        return _.map(FIELDS, field => {
+        return _.map(formFields, field => {
             return <Field key={field.name} component={SurveyField} type="text" label={field.label} name={field.name} />
         });
     }
@@ -43,7 +37,7 @@ function Validate(values) {
 
     errors.emails = validateEmails(values.emails || '');
 
-    _.each(FIELDS, ({name}) => {
+    _.each(formFields, ({name}) => {
         if(!values[name]) {
             errors[name] = 'You must provide a value';
         }
@@ -52,7 +46,9 @@ function Validate(values) {
     return errors;
 }
 
+// destroyOnUnmount set to false allows redux form to persist the data on the form fields after submitting
 export default reduxForm({
     validate: Validate,
-    form: 'surveyForm'
+    form: 'surveyForm',
+    destroyOnUnmount: false
 })(SurveyForm);
